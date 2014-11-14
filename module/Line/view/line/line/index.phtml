@@ -1,0 +1,30 @@
+ <?php
+ $title = 'Bus lines';
+ $this->headTitle($title);
+ ?>
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ <p>
+     <a href="<?php echo $this->url('line', array('action'=>'add'));?>">Add new</a>
+ </p>
+
+ <table class="table">
+ <tr>
+     <th>Name</th>
+     <th>Description</th>
+     <th>Added</th>
+     <th>&nbsp;</th>
+ </tr>
+ <?php foreach ($lines as $line) : ?>
+ <tr>
+     <td><?php echo $this->escapeHtml($line->name);?></td>
+     <td><?php echo $this->escapeHtml($line->description);?></td>
+     <td><?php echo $line->added->format('d.m.Y H:i:s'); ?></td>
+     <td>
+         <a href="<?php echo $this->url('line',
+             array('action'=>'edit', 'id' => $line->id));?>">Edit</a>
+         <a href="<?php echo $this->url('line',
+             array('action'=>'delete', 'id' => $line->id));?>">Delete</a>
+     </td>
+ </tr>
+ <?php endforeach; ?>
+ </table>
