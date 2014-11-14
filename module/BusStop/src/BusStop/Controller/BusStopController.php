@@ -3,7 +3,7 @@ namespace BusStop\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use BusStop\Model\BusStop;   
+use BusStop\Entity\BusStop;   
 use BusStop\Form\BusStopForm;
 use Doctrine\ORM\EntityManager;
 
@@ -22,9 +22,29 @@ class BusStopController extends AbstractActionController
      public function indexAction()
      {
      	return new ViewModel(array(
-            'busstops' => $this->getEntityManager()->getRepository('BusStop\Entity\BusStop')->findAll(),
+            'busstops' => $this->getEntityManager()->getRepository('BusStop\Entity\BusStop')->findAll()
         ));
      }
+	 
+	 public function viewAction() {
+	 	$slug = $this->params()->fromRoute('slug', null);
+		if (empty($slug)) {
+             return $this->redirect()->toRoute('busstop');
+         }
+		
+		//Replace - with space
+		$name = $this->_slugToName($slug);
+		
+		//Search first busstop with matching name
+		$busStop = $this->getEntityManager()->getRepository('BusStop\Entity\BusStop')->findOneByName($name);
+		
+		//Return to index if bus stop not found
+		if(empty($busStop)) {
+			return $this->redirect()->toRoute('busstop');
+		}
+		
+		return array('busStop' => $busStop);
+	 }
 
      public function addAction()
      {
@@ -51,14 +71,15 @@ class BusStopController extends AbstractActionController
 
      public function editAction()
      {
-     	 $id = (int) $this->params()->fromRoute('id', 0);
-         if (!$id) {
+     	 $slug = $this->params()->fromRoute('slug', null);
+         if (empty($slug)) { 
              return $this->redirect()->toRoute('busstop', array(
                  'action' => 'add'
              ));
          }
 
-         $busstop = $this->getEntityManager()->find('BusStop\Entity\BusStop', $id);
+		 $name = $this->_slugToName($slug);
+         $busstop = $this->getEntityManager()->getRepository('BusStop\Entity\BusStop')->findOneByName($name);
          if (!$busstop) {
             return $this->redirect()->toRoute('busstop', array(
                 'action' => 'index'
@@ -83,14 +104,14 @@ class BusStopController extends AbstractActionController
          }
 
          return array(
-             'id' => $id,
+             'slug' => $slug,
              'form' => $form,
          );
      }
 
      public function deleteAction()
      {
-     	 $id = (int) $this->params()->fromRoute('id', 0);
+     	 $slug = (int) $this->params()->fromRoute('slug', null);
          if (!$id) {
              return $this->redirect()->toRoute('busstop');
          }

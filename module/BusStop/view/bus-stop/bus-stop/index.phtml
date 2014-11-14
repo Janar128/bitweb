@@ -14,16 +14,20 @@
      <th>Longitude</th>
      <th>&nbsp;</th>
  </tr>
- <?php foreach ($busstops as $busStop) : ?>
+ <?php foreach ($busstops as $busStop) : 
+ 	$slug = str_replace(' ', '-', $busStop->name);
+ 	?>
  <tr>
      <td><?php echo $this->escapeHtml($busStop->name);?></td>
      <td><?php echo $this->escapeHtml($busStop->lat);?></td>
      <td><?php echo $this->escapeHtml($busStop->lng);?></td>
      <td>
+     	 <a href="<?php echo $this->url('busstop',
+             array('action'=>'view', 'slug' => $slug));?>">View</a>
          <a href="<?php echo $this->url('busstop',
-             array('action'=>'edit', 'id' => $busStop->id));?>">Edit</a>
+             array('action'=>'edit', 'slug' => $slug));?>">Edit</a>
          <a href="<?php echo $this->url('busstop',
-             array('action'=>'delete', 'id' => $busStop->id));?>">Delete</a>
+             array('action'=>'delete', 'slug' => $slug));?>">Delete</a>
      </td>
  </tr>
  <?php endforeach; ?>

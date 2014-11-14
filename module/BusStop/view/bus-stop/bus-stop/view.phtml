@@ -1,0 +1,15 @@
+<?php
+$this->headTitle($this->escapeHtml($busStop->name));
+?>
+<h1><?php echo $this->escapeHtml($busStop->name); ?></h1>
+
+<table class="table table-hover table-stiped">
+ 	<tr>
+     	<td><b>Latitude</b></td>
+     	<td><?php echo $busStop->lat;?></td>
+ 	</tr>
+ 	<tr>
+     	<td><b>Longitude</b></td>
+     	<td><?php echo $busStop->lng;?></td>
+ 	</tr>
+</table>

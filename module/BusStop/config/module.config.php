@@ -13,10 +13,10 @@ return array(
              'busstop' => array(
                  'type'    => 'segment',
                  'options' => array(
-                     'route'    => '/busstop[/][:action][/:id]',
+                     'route'    => '/busstop[/][:action][/:slug]',
                      'constraints' => array(
                          'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                         'id'     => '[0-9]+',
+                         'slug'     => '[a-zA-Z][a-zA-Z0-9_-]*',
                      ),
                      'defaults' => array(
                          'controller' => 'BusStop\Controller\BusStop',
